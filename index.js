@@ -5,7 +5,7 @@ const exphbs  = require('express-handlebars');
 const bodyParser = require('body-parser');
 const SettingsBill = require('./settings-bill');
 const settingsBill = SettingsBill();
-
+ 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -13,15 +13,15 @@ app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 
 app.listen(PORT, function() {
-    // console.log("App running");
+   
 });
-
+ 
 app.get("/", function(req, res){
   res.render('index', {settings: settingsBill.getSettings()});
-
+   
 });
 
-app.use(express.static('public'));
+app.use(express.static('public')); 
 
 app.post("/settings", function(req, res){
     
@@ -35,8 +35,6 @@ app.post("/settings", function(req, res){
 
     res.redirect('/');
 });
-
-
 
 app.post("/action", function(req, res){
     
