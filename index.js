@@ -18,11 +18,35 @@ app.listen(PORT, function() {
 });
  
 app.get("/", function(req, res){
-  res.render('index', {
-    settings: settingsBill.getSettings(),
-    totals: settingsBill.totals()
-  });
-   
+
+
+  if (settingsBill.values().warn === undefined ) {
+    res.render('index', {
+      settings: settingsBill.getSettings(),
+      totals: settingsBill.totals(),
+      gTot: 'gTot'
+    });
+
+  } if (settingsBill.values().grand < settingsBill.values().warn && settingsBill.values().grand < settingsBill.values().crit) {
+    res.render('index', {
+      settings: settingsBill.getSettings(),
+      totals: settingsBill.totals(),
+      gTot: 'gTot'
+    });
+  } else if (settingsBill.values().grand >= settingsBill.getSettings().warningLevel && settingsBill.values().grand < settingsBill.getSettings().criticalLevel) {
+    res.render('index', {
+      settings: settingsBill.getSettings(),
+      totals: settingsBill.totals(),
+      gTot: 'warning'
+    });
+  } else if (settingsBill.hasReachedCriticalLevel()) {
+    res.render('index', {
+      settings: settingsBill.getSettings(),
+      totals: settingsBill.totals(),
+      gTot: 'danger' 
+    });
+  }
+
 });
 
 app.use(express.static('public')); 
@@ -35,7 +59,6 @@ app.post("/settings", function(req, res){
         warningLevel: req.body.warningLevel,
         criticalLevel: req.body.criticalLevel,
     });
-    console.log(settingsBill.getSettings());
 
     res.redirect('/');
 });

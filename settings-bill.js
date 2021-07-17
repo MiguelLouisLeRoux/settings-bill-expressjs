@@ -3,7 +3,8 @@ module.exports = function SettingsBill() {
     let smsCost;
     let callCost;
     let warningLevel;
-    let criticalLevel; 
+    let criticalLevel;
+    let grandTot = 0;
 
     let actionList = [];
 
@@ -29,6 +30,7 @@ module.exports = function SettingsBill() {
         let cost = 0;
 
         if (grandTotal() < criticalLevel) {
+        
             if (action === 'sms'){
                 cost = smsCost;
             }
@@ -90,6 +92,7 @@ module.exports = function SettingsBill() {
 
     function grandTotal() {
         let gTot = getTotal('sms') + getTotal('call')
+        grandTot = Number(gTot).toFixed(2);
         return Number(gTot).toFixed(2);
     }
 
@@ -112,9 +115,19 @@ module.exports = function SettingsBill() {
         return reachedWarningLevel;
     }
 
+    
+
     function hasReachedCriticalLevel(){
         const total = grandTotal();
-        return total >= criticalLevel;
+        return total >= criticalLevel || total + callCost >= criticalLevel || total + Cost >= criticalLevel;
+    }
+
+    function values(){
+        return {
+            warn: warningLevel,
+            crit: criticalLevel,
+            grand: grandTot,
+        }
     }
 
     return {
@@ -125,6 +138,8 @@ module.exports = function SettingsBill() {
         actionsFor,
         totals,
         hasReachedWarningLevel,
-        hasReachedCriticalLevel
+        hasReachedCriticalLevel,
+        values,
+        grandTotal
     }
 }
