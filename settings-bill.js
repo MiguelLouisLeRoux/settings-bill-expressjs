@@ -27,18 +27,22 @@ module.exports = function SettingsBill() {
     function recordAction(action) {
 
         let cost = 0;
-        if (action === 'sms'){
-            cost = smsCost;
-        }
-        else if (action === 'call'){
-            cost = callCost;
-        }
 
-        actionList.push({
-            type: action,
-            cost,
-            timestamp: new Date()
-        });
+        if (grandTotal() < criticalLevel) {
+            if (action === 'sms'){
+                cost = smsCost;
+            }
+            else if (action === 'call'){
+                cost = callCost;
+            }
+    
+            actionList.push({
+                type: action,
+                cost,
+                timestamp: new Date()
+            });
+        }
+        
     }
 
     function actions(){
@@ -85,16 +89,18 @@ module.exports = function SettingsBill() {
     }
 
     function grandTotal() {
-        return getTotal('sms') + getTotal('call');
+        let gTot = getTotal('sms') + getTotal('call')
+        return Number(gTot).toFixed(2);
     }
 
     function totals() {
-        let smsTotal = getTotal('sms')
-        let callTotal = getTotal('call')
+        let smsTotal = getTotal('sms').toFixed(2);
+        let callTotal = getTotal('call').toFixed(2);
+
         return {
             smsTotal,
             callTotal,
-            grandTotal : grandTotal()
+            grandTotal : grandTotal() 
         }
     }
 
