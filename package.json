@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "nyc --reporter=html --reporter=text mocha"
-  },
+    "test": "mocha"
+   },
   "author": "",
   "license": "ISC",
   "devDependencies": {

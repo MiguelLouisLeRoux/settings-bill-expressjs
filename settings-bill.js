@@ -15,8 +15,7 @@ module.exports = function SettingsBill() {
         criticalLevel = Number(settings.criticalLevel);
     }
 
-    function getSettings
-    () {
+    function getSettings() {
         return {
             smsCost,
             callCost,
@@ -43,8 +42,7 @@ module.exports = function SettingsBill() {
                 cost,
                 timestamp: new Date()
             });
-        }
-        
+        }  
     }
 
     function actions(){
@@ -54,40 +52,29 @@ module.exports = function SettingsBill() {
     function actionsFor(type){
         const filteredActions = [];
 
-        // loop through all the entries in the action list 
         for (let index = 0; index < actionList.length; index++) {
             const action = actionList[index];
-            // check this is the type we are doing the total for 
+            
             if (action.type === type) {
-                // add the action to the list
+                
                 filteredActions.push(action);
             }
         }
-
         return filteredActions;
-
-        // return actionList.filter((action) => action.type === type);
     }
 
     function getTotal(type) {
         let total = 0;
-        // loop through all the entries in the action list 
+        
         for (let index = 0; index < actionList.length; index++) {
             const action = actionList[index];
-            // check this is the type we are doing the total for 
+            
             if (action.type === type) {
-                // if it is add the total to the list
+    
                 total += action.cost;
             }
         }
         return total;
-
-        // the short way using reduce and arrow functions
-
-        // return actionList.reduce((total, action) => { 
-        //     let val = action.type === type ? action.cost : 0;
-        //     return total + val;
-        // }, 0);
     }
 
     function grandTotal() {
@@ -109,17 +96,34 @@ module.exports = function SettingsBill() {
 
     function hasReachedWarningLevel(){
         const total = grandTotal();
-        const reachedWarningLevel = total >= warningLevel 
-            && total < criticalLevel;
 
-        return reachedWarningLevel;
+        if (total + callCost >= warningLevel && total + callCost < criticalLevel) {
+            return true;
+        } else if (total + smsCost >= warningLevel && total + smsCost < criticalLevel) {
+            return true;
+        } else if (total >= warningLevel && total < criticalLevel) {
+            return true;
+        }
+        return false;
     }
-
-    
 
     function hasReachedCriticalLevel(){
         const total = grandTotal();
-        return total >= criticalLevel || total + callCost >= criticalLevel || total + Cost >= criticalLevel;
+
+        if (total + callCost >= criticalLevel || total + smsCost >= criticalLevel) {
+            return true;
+        } else if (total >= criticalLevel) {
+            return true;
+        }
+        return false;  
+    }
+
+    function notCritWarn() {
+        const total = grandTotal();
+        if (total < warningLevel && total < criticalLevel) {
+           return true; 
+        }
+        return false;
     }
 
     function values(){
@@ -140,6 +144,7 @@ module.exports = function SettingsBill() {
         hasReachedWarningLevel,
         hasReachedCriticalLevel,
         values,
-        grandTotal
+        grandTotal,
+        notCritWarn
     }
 }

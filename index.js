@@ -27,26 +27,27 @@ app.get("/", function(req, res){
       gTot: 'gTot'
     });
 
-  } if (settingsBill.values().grand < settingsBill.values().warn && settingsBill.values().grand < settingsBill.values().crit) {
+  } else if (settingsBill.notCritWarn()) {
     res.render('index', {
       settings: settingsBill.getSettings(),
       totals: settingsBill.totals(),
       gTot: 'gTot'
     });
-  } else if (settingsBill.values().grand >= settingsBill.getSettings().warningLevel && settingsBill.values().grand < settingsBill.getSettings().criticalLevel) {
+  } else if (settingsBill.hasReachedWarningLevel()) {
+   
     res.render('index', {
       settings: settingsBill.getSettings(),
       totals: settingsBill.totals(),
       gTot: 'warning'
     });
+  
   } else if (settingsBill.hasReachedCriticalLevel()) {
     res.render('index', {
       settings: settingsBill.getSettings(),
       totals: settingsBill.totals(),
       gTot: 'danger' 
-    });
+    }); 
   }
-
 });
 
 app.use(express.static('public')); 
