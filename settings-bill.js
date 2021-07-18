@@ -29,7 +29,6 @@ module.exports = function SettingsBill() {
         let cost = 0;
 
         if (grandTotal() < criticalLevel) {
-        
             if (action === 'sms'){
                 cost = smsCost;
             }
@@ -55,8 +54,7 @@ module.exports = function SettingsBill() {
         for (let index = 0; index < actionList.length; index++) {
             const action = actionList[index];
             
-            if (action.type === type) {
-                
+            if (action.type === type) {    
                 filteredActions.push(action);
             }
         }
@@ -70,7 +68,6 @@ module.exports = function SettingsBill() {
             const action = actionList[index];
             
             if (action.type === type) {
-    
                 total += action.cost;
             }
         }

@@ -18,15 +18,12 @@ app.listen(PORT, function() {
 });
  
 app.get("/", function(req, res){
-
-
   if (settingsBill.values().warn === undefined ) {
     res.render('index', {
       settings: settingsBill.getSettings(),
       totals: settingsBill.totals(),
       gTot: 'gTot'
     });
-
   } else if (settingsBill.notCritWarn()) {
     res.render('index', {
       settings: settingsBill.getSettings(),
@@ -34,13 +31,11 @@ app.get("/", function(req, res){
       gTot: 'gTot'
     });
   } else if (settingsBill.hasReachedWarningLevel()) {
-   
     res.render('index', {
       settings: settingsBill.getSettings(),
       totals: settingsBill.totals(),
       gTot: 'warning'
     });
-  
   } else if (settingsBill.hasReachedCriticalLevel()) {
     res.render('index', {
       settings: settingsBill.getSettings(),
@@ -52,8 +47,7 @@ app.get("/", function(req, res){
 
 app.use(express.static('public')); 
 
-app.post("/settings", function(req, res){
-    
+app.post("/settings", function(req, res){  
     settingsBill.setSettings({
         callCost: req.body.callCost,
         smsCost: req.body.smsCost,
@@ -76,9 +70,7 @@ app.get("/actions", function(req, res){
 });
 
 app.get("/actions/:actionType", function(req, res){
-
   const actionType = req.params.actionType;
-
   res.render('actions', {
     actions: settingsBill.actionsFor(actionType)
   });
