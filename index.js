@@ -72,12 +72,9 @@ app.get("/actions", function(req, res){
 
 app.get("/actions/:actionType", function(req, res){
   const actionType = req.params.actionType;
- 
   res.render('actions', {
     actions: settingsBill.actionsFor(actionType)
   });
-
-  // console.log(moment('2021-07-19 11:31:23 PM', 'YYYY-MM-DD hh:mm:ss a').fromNow())
 });
 
 

@@ -71,8 +71,11 @@ module.exports = function SettingsBill() {
             
             if (action.type === type) {    
                 filteredActions.push(action);
+            } else if (type === 'total') {
+                filteredActions.push(action);
             }
         }
+       
         return filteredActions;
     }
 
