@@ -5,8 +5,10 @@ module.exports = function SettingsBill() {
     let warningLevel;
     let criticalLevel;
     let grandTot = 0;
+    const moment = require('moment');
 
     let actionList = [];
+    let list = [];
 
     function setSettings (settings) {
         smsCost = Number(settings.smsCost);
@@ -36,13 +38,26 @@ module.exports = function SettingsBill() {
                 cost = callCost;
             }
     
-            actionList.push({
-                type: action,
-                cost,
-                timestamp: new Date()
-            });
+            if (action != undefined) {
+                actionList.push({
+                    type: action,
+                    cost,
+                    timestamp: new Date
+                });
+                list.push({
+                    type: action,
+                    cost,
+                    timestamp: new Date
+                });
+            }
+
+            for (let i = 0; i < list.length; i++) {
+                let timeStamp = moment(actionList[i].timestamp).format('YYYY-MM-DD hh:mm:ss a');
+                list[i].timestamp = (moment(timeStamp, 'YYYY-MM-DD hh:mm:ss a').fromNow());
+            }
         }  
     }
+
 
     function actions(){
         return actionList;
@@ -51,8 +66,8 @@ module.exports = function SettingsBill() {
     function actionsFor(type){
         const filteredActions = [];
 
-        for (let index = 0; index < actionList.length; index++) {
-            const action = actionList[index];
+        for (let index = 0; index < list.length; index++) {
+            const action = list[index];
             
             if (action.type === type) {    
                 filteredActions.push(action);
@@ -142,6 +157,6 @@ module.exports = function SettingsBill() {
         hasReachedCriticalLevel,
         values,
         grandTotal,
-        notCritWarn
+        notCritWarn,
     }
 }
